@@ -88,6 +88,7 @@ import {
   useHandleLibrary,
 } from "@excalidraw/excalidraw/data/library";
 import { AppMainMenu } from "./components/AppMainMenu";
+import { PresentationControls } from "./components/PresentationControls";
 import { AppWelcomeScreen } from "./components/AppWelcomeScreen";
 import { AppFooter } from "./components/AppFooter";
 import {
@@ -330,6 +331,7 @@ const initializeScene = async (opts: {
 
 const ExcalidrawWrapper = () => {
   const [errorMessage, setErrorMessage] = useState("");
+  const [isPresentationMode, setIsPresentationMode] = useState(false);
   const isCollabDisabled = isRunningInIframe();
 
   const { editorTheme, appTheme, setAppTheme } = useHandleAppTheme();
@@ -866,6 +868,7 @@ const ExcalidrawWrapper = () => {
           theme={appTheme}
           setTheme={(theme) => setAppTheme(theme)}
           refresh={() => forceRefresh((prev) => !prev)}
+          onPresentationStart={() => setIsPresentationMode(true)}
         />
         <AppWelcomeScreen
           onCollabDialogOpen={onCollabDialogOpen}
@@ -1128,6 +1131,12 @@ const ExcalidrawWrapper = () => {
             appState={excalidrawAPI.getAppState()}
             scale={window.devicePixelRatio}
             ref={debugCanvasRef}
+          />
+        )}
+        {isPresentationMode && excalidrawAPI && (
+          <PresentationControls
+            excalidrawAPI={excalidrawAPI}
+            onClose={() => setIsPresentationMode(false)}
           />
         )}
       </Excalidraw>
