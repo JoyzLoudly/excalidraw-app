@@ -3,6 +3,7 @@ import {
   loginIcon,
   ExcalLogo,
   eyeIcon,
+  PlusPromoIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import type { Theme } from "@excalidraw/excalidraw/element/types";
 import { MainMenu } from "@excalidraw/excalidraw/index";
@@ -17,6 +18,7 @@ export const AppMainMenu: React.FC<{
   theme: Theme | "system";
   setTheme: (theme: Theme | "system") => void;
   refresh: () => void;
+  onPresentationStart: () => void;
 }> = React.memo((props) => {
   return (
     <MainMenu>
@@ -81,6 +83,9 @@ export const AppMainMenu: React.FC<{
         <LanguageList style={{ width: "100%" }} />
       </MainMenu.ItemCustom>
       <MainMenu.DefaultItems.ChangeCanvasBackground />
+      <MainMenu.Item icon={PlusPromoIcon} onClick={props.onPresentationStart}>
+        开始演示
+      </MainMenu.Item>
     </MainMenu>
   );
 });
