@@ -133,6 +133,8 @@ import DebugCanvas, {
 import { AIComponents } from "./components/AI";
 import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
 import { isElementLink } from "@excalidraw/excalidraw/element/elementLink";
+import { FileBrowser } from "./components/FileBrowser";
+import { FileBrowserTrigger } from "./components/FileBrowserTrigger";
 
 polyfill();
 
@@ -337,6 +339,7 @@ const ExcalidrawWrapper = () => {
   const { editorTheme, appTheme, setAppTheme } = useHandleAppTheme();
 
   const [langCode, setLangCode] = useAppLangCode();
+  const [isFileBrowserOpen, setIsFileBrowserOpen] = useState(false);
 
   // initial state
   // ---------------------------------------------------------------------------
@@ -795,6 +798,7 @@ const ExcalidrawWrapper = () => {
       })}
     >
       <Excalidraw
+        // 移除ref属性,使用excalidrawAPI属性来获取API引用
         excalidrawAPI={excalidrawRefCallback}
         onChange={onChange}
         initialData={initialStatePromiseRef.current.promise}
@@ -844,6 +848,10 @@ const ExcalidrawWrapper = () => {
           }
           return (
             <div className="top-right-ui">
+              <FileBrowserTrigger
+                onClick={() => setIsFileBrowserOpen(!isFileBrowserOpen)}
+                isActive={isFileBrowserOpen}
+              />
               {collabError.message && <CollabError collabError={collabError} />}
               <LiveCollaborationTrigger
                 isCollaborating={isCollaborating}
@@ -878,22 +886,31 @@ const ExcalidrawWrapper = () => {
           <OverwriteConfirmDialog.Actions.ExportToImage />
           <OverwriteConfirmDialog.Actions.SaveToDisk />
           {excalidrawAPI && (
-            <OverwriteConfirmDialog.Action
-              title={t("overwriteConfirm.action.excalidrawPlus.title")}
-              actionLabel={t("overwriteConfirm.action.excalidrawPlus.button")}
-              onClick={() => {
-                exportToExcalidrawPlus(
-                  excalidrawAPI.getSceneElements(),
-                  excalidrawAPI.getAppState(),
-                  excalidrawAPI.getFiles(),
-                  excalidrawAPI.getName(),
-                );
-              }}
-            >
-              {t("overwriteConfirm.action.excalidrawPlus.description")}
-            </OverwriteConfirmDialog.Action>
+            <>
+              <OverwriteConfirmDialog.Action
+                title={t("overwriteConfirm.action.excalidrawPlus.title")}
+                actionLabel={t("overwriteConfirm.action.excalidrawPlus.button")}
+                onClick={() => {
+                  exportToExcalidrawPlus(
+                    excalidrawAPI.getSceneElements(),
+                    excalidrawAPI.getAppState(),
+                    excalidrawAPI.getFiles(),
+                    excalidrawAPI.getName(),
+                  );
+                }}
+              >
+                {t("overwriteConfirm.action.excalidrawPlus.description")}
+              </OverwriteConfirmDialog.Action>
+            </>
           )}
         </OverwriteConfirmDialog>
+        {excalidrawAPI && (
+          <FileBrowser
+            excalidrawAPI={excalidrawAPI}
+            isOpen={isFileBrowserOpen}
+            onClose={() => setIsFileBrowserOpen(false)}
+          />
+        )}
         <AppFooter onChange={() => excalidrawAPI?.refresh()} />
         {excalidrawAPI && <AIComponents excalidrawAPI={excalidrawAPI} />}
 
