@@ -1,0 +1,32 @@
+.FileBrowserTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-primary-color);
+  margin-right: 0.5rem;
+  
+  &:hover {
+    background-color: var(--button-hover-bg);
+  }
+  
+  &.active {
+    background-color: var(--button-gray-2);
+    color: var(--color-primary);
+  }
+  
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+.top-right-ui {
+  display: flex;
+  align-items: center;
+}

@@ -1,4 +1,5 @@
-export default (sentryErrorId) => `
+// 先定义函数再导出
+const bugIssueTemplate = (sentryErrorId) => `
 ### Scene content
 
 \`\`\`
@@ -9,3 +10,5 @@ Paste scene content here
 
 ${sentryErrorId}
 `;
+
+export default bugIssueTemplate;
